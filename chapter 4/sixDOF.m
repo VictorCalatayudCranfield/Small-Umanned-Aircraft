@@ -1,4 +1,13 @@
 function sixDOF(block)
+    % Level-2 MATLAB S-Function implementing a 6DOF rigid body model.
+    %
+    % The block accepts six inputs representing external forces and
+    % moments and returns the twelve state variables of the aircraft.
+    %
+    % The initial state can be provided as a dialog parameter when
+    % double-clicking the block.  The parameter must be a 12 element
+    % vector arranged as
+    %   [pn pe pd u v w phi theta psi p q r].
     setup(block);
 end
 
@@ -7,6 +16,7 @@ function setup(block)
 
     block.NumInputPorts  = 6;
     block.NumOutputPorts = 1;
+    block.NumDialogPrms  = 1; % initial state vector
 
     % Dimensiones de entrada y salida
     block.SetPreCompInpPortInfoToDynamic;
@@ -36,8 +46,21 @@ function setup(block)
 end
 
 function InitializeConditions(block)
-    block.ContStates.Data = zeros(13,1);
-    block.ContStates.Data(7:10)=eul2quat([0,0,0]);
+    % Retrieve initial condition vector from dialog parameter
+    x0 = block.DialogPrm(1).Data;
+    if isempty(x0)
+        x0 = zeros(12,1);
+    end
+    x0 = x0(:);
+    if numel(x0) ~= 12
+        error('Initial state must be a 12 element vector [pn pe pd u v w phi theta psi p q r]');
+    end
+
+    block.ContStates.Data    = zeros(13,1);
+    block.ContStates.Data(1:3)   = x0(1:3);
+    block.ContStates.Data(4:6)   = x0(4:6);
+    block.ContStates.Data(7:10)  = eul2quat(x0(7:9)');
+    block.ContStates.Data(11:13) = x0(10:12);
 end
 
 function Derivatives(block)
