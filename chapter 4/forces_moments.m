@@ -91,8 +91,10 @@ function out = forces_moments(x, delta, wind, params)
     %% Propeler forces
     Fprop = 0.5*rho*S_prop*Cprop*[(k_motor*delta_t)^2-V_air^2;0;0];
     
+
     %% Total Force
     Force = Fgrav + Faero + Fprop;
+
     
     %% Aerodinamic Moments
 
