@@ -52,11 +52,7 @@ function Derivatives(block)
     n = block.InputPort(6).Data;
     
     % aircraft parameters
-    mass  = 1.56; % mass
-    jx = 0.1147; % inertia
-    jy = 0.0576; % inertia
-    jz = 0.1712; % inertia
-    jxz= 0.0015; % inertia
+    params=evalin('base','params');
 
 
     pn = block.ContStates.Data(1);  % position north
@@ -78,15 +74,15 @@ function Derivatives(block)
 
 
     % precompute inertial terms for readability
-    gamma  = jx*jz -jxz^2;
-    gamma1 = jxz*(jx -jy + jz)/gamma;
-    gamma2 = (jz*(jz -jy) + jxz^2)/gamma;
-    gamma3 = jz/gamma;
-    gamma4 = jxz/gamma;
-    gamma5 = (jz -jx)/jy;
-    gamma6 = jxz/jy;
-    gamma7 = ((jx -jy)*jx + jxz^2)/gamma;
-    gamma8 = jx/gamma;
+    gamma  = params.Jx*params.Jz -params.Jxz^2;
+    gamma1 = params.Jxz*(params.Jx -params.Jy + params.Jz)/gamma;
+    gamma2 = (params.Jz*(params.Jz -params.Jy) + params.Jxz^2)/gamma;
+    gamma3 = params.Jz/gamma;
+    gamma4 = params.Jxz/gamma;
+    gamma5 = (params.Jz -params.Jx)/params.Jy;
+    gamma6 = params.Jxz/params.Jy;
+    gamma7 = ((params.Jx -params.Jy)*params.Jx + params.Jxz^2)/gamma;
+    gamma8 = params.Jx/gamma;
     
     % to ensure norm e =1
     norme=norm([e0,e1,e2,e3]);
@@ -97,12 +93,12 @@ function Derivatives(block)
              2*(e1*e2+e3*e0), e2^2+e0^2-e1^2-e3^2, 2*(e2*e3-e1*e0);...
              2*(e1*e2-e3*e0), 2*(e2*e3+e1*e0), e3^2+e0^2-e1^2-e2^2]*[u, v, w]';
     
-    diffvel = [r*v-q*w; p*w-r*u; q*u-p*v]+1/mass*[fx;fy;fz];
+    diffvel = [r*v-q*w; p*w-r*u; q*u-p*v]+1/params.mass*[fx;fy;fz];
     
     diffquat = [lambda*(1-norme^2), -p, -q, -r; p, lambda*(1-norme^2), r, -q; q, -r, lambda*(1-norme^2), p; r, q, -p, lambda*(1-norme^2)]*0.5*[e0; e1; e2; e3]; 
     
     diffrotvel = [gamma1*p*q-gamma2*q*r; gamma5*p*r-gamma6*(p^2-r^2); gamma7*p*q-gamma1*q*r] +...
-                 [gamma3*l+gamma4*n ; m/jy; gamma4*l+gamma8*n];
+                 [gamma3*l+gamma4*n ; m/params.Jy; gamma4*l+gamma8*n];
 
 
     block.Derivatives.Data = [diffp; diffvel;diffquat;diffrotvel];
