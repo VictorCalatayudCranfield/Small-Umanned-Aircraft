@@ -1,0 +1,60 @@
+function params = getAircraftParams()
+
+    % Parámetros físicos
+    params.mass = 13.5; % kg
+    params.grav = 9.81;
+    params.Jx = 0.8244; % kg*m^2
+    params.Jy = 1.135;  % kg*m^2
+    params.Jz = 1.759;  % kg*m^2
+    params.Jxz = 0.1204; % kg*m^2
+    params.S = 0.55;    % m^2
+    params.b = 2.8956;  % m
+    params.AR = params.b^2/params.S;
+    params.c = 0.18994; % m
+    params.S_prop = 0.2027; % m^2
+    params.rho = 1.2682; % kg/m^3
+    params.k_motor = 80;
+    params.k_T_P = 0;
+    params.k_Omega = 0;
+    params.e = 0.9;
+
+    % Coeficientes longitudinales
+    params.CL_0 = 0.28;
+    params.CD_0 = 0.03;
+    params.Cm_0 = -0.02338;
+    params.CL_alpha = 3.45;
+    params.CD_alpha = 0.30;
+    params.Cm_alpha = -0.38;
+    params.CL_q = 0;
+    params.CD_q = 0;
+    params.Cm_q = -3.6;
+    params.CL_delta_e = -0.36;
+    params.CD_delta_e = 0;
+    params.Cm_delta_e = -0.5;
+    params.Cprop = 1.0;
+    params.M = 50;
+    params.alpha0 = 0.4712;
+    params.epsilon = 0.1592;
+    params.CD_p = 0.0437;
+    params.Cn_delta_r = -0.032;
+    % Coeficientes laterales
+    params.CY_0 = 0;
+    params.Cl_0 = 0;
+    params.Cn_0 = 0;
+    params.CY_beta = -0.98;
+    params.Cl_beta = -0.12;
+    params.Cn_beta = 0.25;
+    params.CY_p = 0;
+    params.Cl_p = -0.26;
+    params.Cn_p = 0.022;
+    params.CY_r = 0;
+    params.Cl_r = 0.14;
+    params.Cn_r = -0.35;
+    params.CY_delta_a = 0;
+    params.Cl_delta_a = 0.105;
+    params.Cn_delta_a = -0.032;
+    params.CY_delta_r = -0.17;
+    params.Cl_delta_r = 0.105;
+
+
+end
